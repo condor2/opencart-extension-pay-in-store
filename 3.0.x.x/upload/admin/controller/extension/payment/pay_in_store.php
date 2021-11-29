@@ -23,16 +23,10 @@ class ControllerExtensionPaymentPayInStore extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$this->load->model('localisation/language');
-
-		$languages = $this->model_localisation_language->getLanguages();
-
-		foreach ($languages as $language) {
-			if (isset($this->error['pay_in_store_pay_in_store' . $language['language_id']])) {
-				$data['error_pay_in_store' . $language['language_id']] = $this->error['pay_in_store_pay_in_store' . $language['language_id']];
-			} else {
-				$data['error_pay_in_store' . $language['language_id']] = '';
-			}
+		if (isset($this->error['pay_in_store'])) {
+			$data['error_pay_in_store'] = $this->error['pay_in_store'];
+		} else {
+			$data['error_pay_in_store'] = array();
 		}
 
 		$data['breadcrumbs'] = array();
@@ -58,11 +52,15 @@ class ControllerExtensionPaymentPayInStore extends Controller {
 
 		$this->load->model('localisation/language');
 
+		$data['payment_pay_in_store_pay_in_store'] = array();
+
+		$languages = $this->model_localisation_language->getLanguages();
+		
 		foreach ($languages as $language) {
-			if (isset($this->request->post['payment_pay_in_store' . $language['language_id']])) {
-				$data['payment_pay_in_store_pay_in_store' . $language['language_id']] = $this->request->post['payment_pay_in_store_pay_in_store' . $language['language_id']];
+			if (isset($this->request->post['payment_pay_in_store_pay_in_store' . $language['language_id']])) {
+				$data['payment_pay_in_store_pay_in_store'][$language['language_id']] = $this->request->post['payment_pay_in_store_pay_in_store' . $language['language_id']];
 			} else {
-				$data['payment_pay_in_store_pay_in_store' . $language['language_id']] = $this->config->get('payment_pay_in_store_pay_in_store' . $language['language_id']);
+				$data['payment_pay_in_store_pay_in_store'][$language['language_id']] = $this->config->get('payment_pay_in_store_pay_in_store' . $language['language_id']);
 			}
 		}
 
@@ -123,8 +121,8 @@ class ControllerExtensionPaymentPayInStore extends Controller {
 		$languages = $this->model_localisation_language->getLanguages();
 
 		foreach ($languages as $language) {
-			if (empty($this->request->post['payment_pay_in_store' . $language['language_id']])) {
-				$this->error['payment_pay_in_store_pay_in_store' .  $language['language_id']] = $this->language->get('error_pay_in_store');
+			if (empty($this->request->post['payment_pay_in_store_pay_in_store' . $language['language_id']])) {
+				$this->error['pay_in_store'][$language['language_id']] = $this->language->get('error_pay_in_store');
 			}
 		}
 
